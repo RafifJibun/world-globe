@@ -1,0 +1,499 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  background: #0f0f1a;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.globe-container {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: #0f0f1a;
+}
+
+.globe-title {
+  position: absolute;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.globe-title h1 {
+  color: white;
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.globe-title p {
+  color: #888;
+  font-size: 14px;
+}
+
+.globe-bottom {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 16px 40px 16px;
+  min-height: 100vh;
+}
+
+.list-btn {
+  margin-top: 8px;
+  padding: 8px 20px;
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  border-radius: 99px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  pointer-events: all;
+}
+
+.list-btn:hover {
+  background: white;
+  color: #0f0f1a;
+}
+
+.globe-search {
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 300px;
+}
+
+.searchbar {
+  position: relative;
+  width: 100%;
+}
+
+.searchbar input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #2a2a3d;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  background: #1a1a2e;
+  color: white;
+  transition: border 0.2s;
+}
+
+.searchbar input::placeholder { color: #555; }
+.searchbar input:focus { border-color: #6c63ff; }
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #1a1a2e;
+  border: 1px solid #2a2a3d;
+  border-radius: 10px;
+  margin-top: 4px;
+  list-style: none;
+  overflow: hidden;
+  z-index: 20;
+}
+
+.suggestions li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.suggestions li:hover { background: #0f0f1a; }
+
+.suggestions li img {
+  width: 28px;
+  height: 18px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.suggestions li span {
+  color: white;
+  font-size: 14px;
+}
+
+/* Halaman List & Detail */
+body.page {
+  overflow: auto;
+  height: auto;
+}
+
+.loading { color: #6c63ff; text-align: center; }
+.error { color: #ff6b6b; text-align: center; }
+
+.back-btn {
+  background: transparent;
+  color: #6c63ff;
+  border: 1px solid #6c63ff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 14px;
+  transition: background 0.2s;
+  display: block;
+}
+
+.back-btn:hover { background: #1a1a2e; }
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #2a2a3d;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  background: #1a1a2e;
+  color: white;
+  margin-bottom: 12px;
+  transition: border 0.2s;
+}
+
+.search-input::placeholder { color: #555; }
+.search-input:focus { border-color: #6c63ff; }
+
+.region-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.region-btn {
+  padding: 8px 16px;
+  background: #1a1a2e;
+  color: #888;
+  border: 1px solid #2a2a3d;
+  border-radius: 99px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.region-btn:hover { border-color: #6c63ff; color: white; }
+.region-btn.active { background: #6c63ff; color: white; border-color: #6c63ff; }
+
+.count {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.country-card {
+  background: #1a1a2e;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #2a2a3d;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.country-card:hover {
+  transform: translateY(-4px);
+  border-color: #6c63ff;
+}
+
+.country-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.country-info {
+  padding: 12px;
+}
+
+.country-info h3 {
+  color: white;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.country-info p {
+  color: #888;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.card {
+  background: #1a1a2e;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #2a2a3d;
+}
+
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.info { padding: 24px; }
+
+.info h2 {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.official-name {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #0f0f1a;
+  border-radius: 8px;
+  border: 1px solid #2a2a3d;
+}
+
+.label { color: #888; font-size: 14px; }
+
+.detail-item span:last-child {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: right;
+  max-width: 60%;
+}
+
+.wiki-box {
+  background: #0f0f1a;
+  border: 1px solid #2a2a3d;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.wiki-label {
+  color: #6c63ff;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.wiki-text {
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.wiki-link {
+  color: #6c63ff;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.wiki-link:hover { text-decoration: underline; }
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  background: rgba(15, 15, 26, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #2a2a3d;
+}
+
+.navbar-brand {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.navbar-brand span {
+  color: #6c63ff;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-link {
+  background: transparent;
+  color: #888;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  color: white;
+  background: #1a1a2e;
+}
+
+.nav-link.active {
+  color: white;
+  background: #1a1a2e;
+  border: 1px solid #6c63ff;
+}
+
+.card-hero {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 24px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-overlay h2 {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+
+.flag-small {
+  width: 48px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.info-box {
+  background: #0f0f1a;
+  border: 1px solid #2a2a3d;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-box-label {
+  color: #888;
+  font-size: 12px;
+}
+
+.info-box-value {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.section-title {
+  color: #6c63ff;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+}
+
+.neighbors {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.neighbor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.neighbor-card:hover {
+  transform: translateY(-2px);
+}
+
+.neighbor-card img {
+  width: 64px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #2a2a3d;
+}
+
+.neighbor-card span {
+  color: #888;
+  font-size: 11px;
+  text-align: center;
+  max-width: 64px;
+}
