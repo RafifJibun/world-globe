@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
+import Skeleton from "../components/Skeleton"
 
 function CountryDetail() {
   const { name } = useParams()
   const [country, setCountry] = useState(null)
   const [wiki, setWiki] = useState(null)
+  const [funFacts, setFunFacts] = useState([])
+  const [attractions, setAttractions] = useState([])
+  const [foods, setFoods] = useState([])
   const [photo, setPhoto] = useState(null)
   const [neighbors, setNeighbors] = useState([])
   const [loading, setLoading] = useState(true)
@@ -35,6 +39,24 @@ function CountryDetail() {
           }
         }
 
+        const resFacts = await fetch(`http://localhost:8000/api/fun-facts/${name}`)
+        if (resFacts.ok) {
+          const dataFacts = await resFacts.json()
+          setFunFacts(dataFacts)
+        }
+
+        const resAttractions = await fetch(`http://localhost:8000/api/attractions/${name}`)
+        if (resAttractions.ok) {
+          const dataAttractions = await resAttractions.json()
+          setAttractions(dataAttractions)
+        }
+
+        const resFoods = await fetch(`http://localhost:8000/api/foods/${name}`)
+        if (resFoods.ok) {
+          const dataFoods = await resFoods.json()
+          setFoods(dataFoods)
+        }
+
         if (c.borders?.length > 0) {
           const resBorders = await fetch(
             `https://restcountries.com/v3.1/alpha?codes=${c.borders.join(",")}&fields=name,flags`
@@ -54,7 +76,25 @@ function CountryDetail() {
     fetchAll()
   }, [name])
 
-  if (loading) return <div className="container"><p className="loading">Memuat...</p></div>
+  if (loading) return (
+    <div className="container">
+      <div className="card">
+        <Skeleton height="280px" borderRadius="0" />
+        <div className="info">
+          <div className="info-grid">
+            <Skeleton height="80px" />
+            <Skeleton height="80px" />
+            <Skeleton height="80px" />
+            <Skeleton height="80px" />
+          </div>
+          <Skeleton height="150px" />
+          <Skeleton height="40px" />
+          <Skeleton height="40px" />
+          <Skeleton height="40px" />
+        </div>
+      </div>
+    </div>
+  )
   if (error) return <div className="container"><p className="error">{error}</p></div>
 
   const callingCode = country.idd?.root
@@ -152,6 +192,51 @@ function CountryDetail() {
               </div>
             )}
           </div>
+
+          {funFacts.length > 0 && (
+            <>
+              <div className="section-title">💡 Fun Facts</div>
+              <div className="details">
+                {funFacts.map((f, i) => (
+                  <div key={i} className="detail-item fact-item">
+                    <span>{f.fact}</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {attractions.length > 0 && (
+            <>
+              <div className="section-title">🏛️ Tempat Wisata</div>
+              <div className="details">
+                {attractions.map((a, i) => (
+                  <div key={i} className="detail-item fact-item">
+                    <div>
+                      <p style={{ color: "white", fontWeight: "600" }}>{a.name}</p>
+                      {a.description && <p style={{ color: "#888", fontSize: "13px", marginTop: "4px" }}>{a.description}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {foods.length > 0 && (
+            <>
+              <div className="section-title">🍜 Makanan Khas</div>
+              <div className="details">
+                {foods.map((f, i) => (
+                  <div key={i} className="detail-item fact-item">
+                    <div>
+                      <p style={{ color: "white", fontWeight: "600" }}>{f.name}</p>
+                      {f.description && <p style={{ color: "#888", fontSize: "13px", marginTop: "4px" }}>{f.description}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
 
           {/* Negara Tetangga */}
           {neighbors.length > 0 && (
