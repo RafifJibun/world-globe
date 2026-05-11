@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import Skeleton from "../components/Skeleton"
 
+const API_URL = "https://world-globe-api-production.up.railway.app"
+
 function CountryDetail() {
   const { name } = useParams()
   const [country, setCountry] = useState(null)
@@ -39,19 +41,19 @@ function CountryDetail() {
           }
         }
 
-        const resFacts = await fetch(`http://localhost:8000/api/fun-facts/${name}`)
+       const resFacts = await fetch(`${API_URL}/api/fun-facts/${name}`)
         if (resFacts.ok) {
           const dataFacts = await resFacts.json()
           setFunFacts(dataFacts)
         }
 
-        const resAttractions = await fetch(`http://localhost:8000/api/attractions/${name}`)
+        const resAttractions = await fetch(`${API_URL}/api/attractions/${name}`)
         if (resAttractions.ok) {
           const dataAttractions = await resAttractions.json()
           setAttractions(dataAttractions)
         }
 
-        const resFoods = await fetch(`http://localhost:8000/api/foods/${name}`)
+        const resFoods = await fetch(`${API_URL}/api/foods/${name}`)
         if (resFoods.ok) {
           const dataFoods = await resFoods.json()
           setFoods(dataFoods)
